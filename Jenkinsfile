@@ -1,5 +1,8 @@
 pipeline{
     agent-any
+    environment{
+        python = "C:\\Users\\duvva\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    }
     stages{
         stage('Build docker image'){
             steps{
