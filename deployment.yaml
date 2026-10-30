@@ -1,4 +1,4 @@
-api-Version: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kubedemoapp2-deployment
@@ -11,9 +11,9 @@ spec:
     metadata:
       labels:
         app: kubedemoapp2
-  spec:
-    containers:
-      - name: kubedemoapp2
-        image: kubedemoapp2:register
-        ports:
-          - containerPort: 5000
+    spec:
+      containers:
+        - name: kubedemoapp2
+          image: induduvva/test_dev:register
+          ports:
+            - containerPort: 5000
