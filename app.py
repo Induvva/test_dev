@@ -2,7 +2,7 @@ from flask import Flask,render_template,request,redirect,url_for
 app=Flask(__name__)
 @app.route('/')
 def hello_world():
-    return '<center><h1>Welcome</h1></center>'
+    return '<center><h1>Welcome</h1><a href="/register">Register</a></center>'
 
 @app.route('/success/<user>/<email>/<roll_no>')
 def success(user,email,roll_no):

@@ -19,7 +19,7 @@ pipeline {
                 echo "Give docker credentials"
 
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
+                    credentialsId: 'docker-credentials',
                     usernameVariable: 'DOCKER_USERNAME',
                     passwordVariable: 'DOCKER_TOKEN'
                 )]) {
