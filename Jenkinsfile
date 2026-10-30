@@ -1,57 +1,46 @@
 pipeline {
     agent any
-
     environment {
-        PYTHON = "C:\\Users\\duvva\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Users\\<your-windows-user>\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;${env.PATH}"
     }
-
     stages {
-
-        stage('Build docker image') {
+        stage('Build Docker Image') {
             steps {
-                echo "Build a docker image"
-                bat "docker build -t induduvva/myregistrationapp:register ."
+                echo "Build Docker Image"
+                bat "docker build -t kubedemoapp:v1 ."
             }
         }
-
-        stage('Give docker credentials') {
+        stage('Docker Login') {
             steps {
-                echo "Give docker credentials"
-
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-credentials',
-                    usernameVariable: 'DOCKER_USERNAME',
-                    passwordVariable: 'DOCKER_TOKEN'
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
-                    bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_TOKEN%"
+                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%'
                 }
             }
         }
-
-        stage('Push the docker image into DockerHub') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
-                echo "Push docker image into DockerHub"
-                bat "docker tag induduvva/myregistrationapp:register induduvva/test_dev:register"
-                bat "docker push induduvva/test_dev:register"
+                echo "Push Docker Image to Docker Hub"
+                bat "docker tag kubedemoapp:v1 induduvva/week9:kubeimage1"
+                bat "docker push induduvva/week9:kubeimage1"
             }
         }
-
-        stage('Deploy in Kubernetes') {
+        stage('Deploy to Kubernetes') {
             steps {
-                echo "Deploying into Kubernetes"
-                bat "kubectl apply -f deployment.yaml"
-                bat "kubectl apply -f service.yaml"
+                bat 'kubectl apply -f deployment.yaml --validate=false'
+                bat 'kubectl apply -f service.yaml'
             }
         }
     }
-
     post {
         success {
-            echo "Successfully completed"
+            echo 'Pipeline completed successfully!'
         }
-
         failure {
-            echo "Failed!"
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }

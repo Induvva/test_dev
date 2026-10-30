@@ -1,23 +1,20 @@
-from flask import Flask,render_template,request,redirect,url_for
-app=Flask(__name__)
-@app.route('/')
-def hello_world():
-    return '<center><h1>Welcome</h1><a href="/register">Register</a></center>'
+from flask import Flask, request, render_template
 
-@app.route('/success/<user>/<email>/<roll_no>')
-def success(user,email,roll_no):
-    return render_template('success.html',user=user,email=email,roll_no=roll_no)
+app = Flask(__name__)
 
-@app.route('/register',methods=['GET'])
-def register():
-    return render_template('register.html')
+@app.route("/", methods=["GET", "POST"])
+def index():
+    show_form = True
+    message = ""
+    if request.method == "POST":
+        name = request.form.get("name", "")
+        email = request.form.get("email", "")
+        if name and email:
+            show_form = False
+            message = f"Thanks {name}! You have successfully registered for the event using {email}."
+        else:
+            message = "Please fill in both name and email."
+    return render_template("index.html", show_form=show_form, message=message)
 
-@app.route('/register',methods=['POST'])
-def register_user():
-    user=request.form['user']
-    email=request.form['email']
-    roll_no=request.form['roll_no']
-    return redirect(url_for('success',user=user,email=email,roll_no=roll_no))
-
-if __name__=="__main__":
-    app.run(host='0.0.0.0',port=5000,debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=False)
