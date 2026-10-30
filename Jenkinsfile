@@ -31,7 +31,8 @@ pipeline {
         stage('Push the docker image into DockerHub') {
             steps {
                 echo "Push docker image into DockerHub"
-                bat "docker push induduvva/myregistrationapp:register"
+                bat "docker tag induduvva/myregistrationapp:register induduvva/test_dev:register"
+                bat "docker push induduvva/test_dev:register"
             }
         }
 
